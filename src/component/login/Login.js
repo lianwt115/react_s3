@@ -3,13 +3,15 @@ import './Login.css'
 import React, { Component } from 'react';
 import creatLoginAction from '../actions/login';
 import { connect } from 'react-redux'
-import fetch from 'node-fetch';
+import FetchUtils from '../FetchUtils'
 const FormItem = Form.Item;
 class NormalLoginForm extends React.Component {
 
-    handleSubmit = (e) => {
+
+
+    handleSubmit =   (e) => {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
 
                 //逻辑处理分离
@@ -25,16 +27,19 @@ class NormalLoginForm extends React.Component {
 
                     alert('密码或用户名错误')
                 }*/
-                console.log(this.props);
+
                 this.props.userLogin(values)
+                console.log('Received values of form: ', values);
+                console.log(this.props);
+                var  fetchUtisl=new FetchUtils('users/login')
 
-
-                //TODO 跨域问题
-                var param='username='+values.userName+'&userpwd='+values.password
-
-                fetch('http://localhost:9898/users/find?'+param)
-                    .then(res => console.log(res));
-
+                var res = await fetchUtisl.fetchPostLogin(values)
+                
+                if (200 === res.code  ) {
+                    this.props.history.push('/main')
+                }else{
+                    alert(res.message)
+                }
             }
         });
     }
@@ -63,7 +68,7 @@ class NormalLoginForm extends React.Component {
                         valuePropName: 'checked',
                         initialValue: true,
                     })(
-                        <Checkbox>{this.props.value}</Checkbox>
+                        <Checkbox>Remmber me</Checkbox>
                     )}
                     <a className="login-form-forgot" href="">Forgot password</a>
                     <Button type="primary" htmlType="submit" className="login-form-button">
@@ -81,7 +86,6 @@ const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
 //映射state到props
 function mapStateToProps(state) {
 
-    console.log(state)
     return {
         value: state.login.name
     }

@@ -3,12 +3,13 @@
 
 const initState = {
 
-    name:''
+    name:'',
+    loginData:{}
 
 }
 
 
- function login(state = initState, action) {
+  function login(state = initState, action) {
     console.log(state,action)
     switch (action.type) {
         case 'LOGIN':

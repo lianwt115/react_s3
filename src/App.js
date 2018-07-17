@@ -1,13 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon ,Button} from 'antd';
+import { Route,Switch,Link} from 'react-router-dom';
+import Login from "./component/login/Login";
+import noMatch from './component/notfound/404';
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
 class App extends React.Component {
     state = {
         collapsed: false,
-        text:''
+        text:'',
     };
 
     onCollapse = (collapsed) => {
@@ -47,6 +50,15 @@ class App extends React.Component {
                             <Menu.Item key="3">Tom</Menu.Item>
                             <Menu.Item key="4">Bill</Menu.Item>
                             <Menu.Item key="5">Alex</Menu.Item>
+                            <Menu.Item key="/main/login">
+                                <Link to={'/main/login'}><span>login</span></Link>
+                            </Menu.Item>
+                            <Menu.Item key="/main/button">
+                                <Link to={'/main/button'}><span>button</span></Link>
+                            </Menu.Item>
+                            <Menu.Item key="/main/icon">
+                                <Link to={'/main/icon'}><span>icon</span></Link>
+                            </Menu.Item>
                         </SubMenu>
                         <SubMenu
                             key="sub2"
@@ -67,13 +79,15 @@ class App extends React.Component {
                     </Header>
 
                   <Content style={{ margin: '0 16px' }}>
-                        <Breadcrumb style={{ margin: '16px 0' }}>
-                            <Breadcrumb.Item>User</Breadcrumb.Item>
-                            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                        </Breadcrumb>
-                        <div style={{ padding: 24, background: '#fff', minHeight: 750 }}>
-                            {this.state.text}
-                        </div>
+                      <Breadcrumb style={{ margin: '16px 0',background: '#fff'}}>
+                          <Breadcrumb.Item>{this.state.text}</Breadcrumb.Item>
+                      </Breadcrumb>
+                      <Switch>
+                          <Route exact path={'/main/icon'} component={Icon} />
+                          <Route exact path={'/main/button'} component={Button} />
+                          <Route component={noMatch} />
+                      </Switch>
+
                     </Content>
                     <Footer style={{ background: '#fff',textAlign: 'center' }}>
                         Ant Design ©2016 Created by Ant UED
